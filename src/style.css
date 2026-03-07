@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Asymmetric Notch Button (pojok kiri-atas & kanan-bawah rounded) ── */
+.btn-notch {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 8px;
+}
+
 /* ── Global Line/Grid Aesthetic ──────────────────────────────── */
 
 /* Base: remove rounded corners globally for consistent flat look */

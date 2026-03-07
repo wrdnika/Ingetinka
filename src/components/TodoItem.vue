@@ -130,13 +130,13 @@
           <div class="flex justify-end gap-2 mt-6 pt-4 border-t border-white/10">
             <button
               @click="editing = false"
-              class="px-4 py-2 text-xs text-white/50 border border-white/10 hover:text-white hover:border-white/30 transition-colors uppercase tracking-widest"
+              class="px-4 py-2 text-xs text-white/50 border border-white/10 btn-notch hover:text-white hover:border-white/30 transition-colors uppercase tracking-widest"
             >
               {{ $t('todo.cancel') }}
             </button>
             <button
               @click="saveEdit"
-              class="px-4 py-2 text-xs text-gray-900 bg-cyan-400 hover:bg-cyan-300 transition-colors font-bold uppercase tracking-widest"
+              class="px-4 py-2 text-xs text-gray-900 bg-cyan-400 btn-notch hover:bg-cyan-300 transition-colors font-bold uppercase tracking-widest"
             >
               {{ $t('todo.save') }}
             </button>

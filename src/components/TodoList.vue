@@ -22,7 +22,7 @@
         <div class="relative">
           <button
             @click="showFilterOptions = !showFilterOptions"
-            class="p-2 border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors"
+            class="p-2 border border-white/10 btn-notch text-white/40 hover:text-white hover:border-white/30 transition-colors"
             data-testid="filter-button"
           >
             <Filter class="h-3.5 w-3.5" />
@@ -43,7 +43,7 @@
         <div class="relative">
           <button
             @click="showSortOptions = !showSortOptions"
-            class="p-2 border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors"
+            class="p-2 border border-white/10 btn-notch text-white/40 hover:text-white hover:border-white/30 transition-colors"
             data-testid="sort-button"
           >
             <ArrowUpDown class="h-3.5 w-3.5" />

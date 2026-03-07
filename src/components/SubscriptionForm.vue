@@ -105,7 +105,7 @@
     <button
       type="submit"
       :disabled="loading"
-      class="w-full p-3 bg-cyan-400 text-gray-900 text-xs font-bold uppercase tracking-widest hover:bg-cyan-300 active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      class="w-full p-3 bg-cyan-400 text-gray-900 text-xs font-bold uppercase tracking-widest btn-notch hover:bg-cyan-300 active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <Loader2 v-if="loading" class="w-4 h-4 animate-spin" />
       <span v-else>{{ subscription ? $t('subscription.form.update') : $t('subscription.form.save') }}</span>

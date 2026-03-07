@@ -49,7 +49,7 @@
       <button 
         type="button"
         @click="isCreatingCategory = !isCreatingCategory"
-        class="p-3 border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors"
+        class="p-3 border border-white/10 btn-notch text-white/40 hover:text-white hover:border-white/30 transition-colors"
         title="Add New Category"
       >
         <PlusIcon class="w-4 h-4" />
@@ -75,7 +75,7 @@
         <button 
           type="button"
           @click="handleCreateCategory"
-          class="px-3 py-2 bg-cyan-400 text-gray-900 text-xs font-bold uppercase tracking-widest hover:bg-cyan-300 transition-colors"
+          class="px-3 py-2 bg-cyan-400 text-gray-900 text-xs font-bold uppercase tracking-widest btn-notch hover:bg-cyan-300 transition-colors"
         >
           Save
         </button>
@@ -93,7 +93,7 @@
     <!-- Submit -->
     <button
       type="submit"
-      class="w-full p-3 bg-cyan-400 text-gray-900 text-xs font-bold uppercase tracking-widest hover:bg-cyan-300 active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2"
+      class="w-full p-3 bg-cyan-400 text-gray-900 text-xs font-bold uppercase tracking-widest btn-notch hover:bg-cyan-300 active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2"
     >
       <PlusIcon class="w-4 h-4" />
       {{ $t('todo.form.add') }}

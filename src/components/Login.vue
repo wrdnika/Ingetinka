@@ -7,7 +7,7 @@
     <div class="absolute top-6 right-6 z-20">
       <button 
         @click="toggleLanguage" 
-        class="flex items-center gap-2 px-3 py-1.5 text-white/40 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors border border-white/10 hover:border-white/30"
+        class="flex items-center gap-2 px-3 py-1.5 text-white/40 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors border border-white/10 hover:border-white/30 btn-notch"
       >
         <Globe class="w-3 h-3" />
         <span>{{ locale === 'id' ? 'ID' : 'EN' }}</span>
@@ -42,7 +42,7 @@
         <div class="space-y-3">
           <button 
             @click="handleLogin"
-            class="group w-full flex items-center justify-center gap-3 bg-white text-gray-900 font-bold py-3 px-6 text-sm tracking-wide hover:bg-white/90 active:scale-[0.98] transition-all duration-200"
+            class="group w-full flex items-center justify-center gap-3 bg-white text-gray-900 font-bold py-3 px-6 text-sm tracking-wide btn-notch hover:bg-white/90 active:scale-[0.98] transition-all duration-200"
           >
             <svg class="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
