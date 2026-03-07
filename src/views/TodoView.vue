@@ -2,7 +2,7 @@
   <div class="h-full flex flex-col">
     <div class="flex-grow overflow-hidden">
       <TodoList
-        :tasks="tasks"
+        :tasks="filteredTasks"
         :categories="todoCategories"
         @toggle="toggleTask"
         @remove="removeTask"
@@ -32,7 +32,7 @@ const props = defineProps({
 });
 
 const {
-  tasks,
+  filteredTasks,
   todoCategories,
   showModal,
   addTask,

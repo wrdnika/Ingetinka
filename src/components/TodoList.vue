@@ -58,11 +58,11 @@
             v-if="showSortOptions"
             class="absolute right-0 mt-1 w-44 bg-gray-900 border border-white/10 shadow-2xl z-20"
           >
-            <a href="#" @click.prevent="applySort('deadline')" class="flex items-center px-4 py-2.5 text-xs text-white/50 hover:text-white hover:bg-white/5 uppercase tracking-widest">{{ $t('todo.sortDeadline') }}</a>
+            <button type="button" @click="applySort('deadline')" class="w-full flex items-center px-4 py-2.5 text-xs text-white/50 hover:text-white hover:bg-white/5 uppercase tracking-widest transition-colors">{{ $t('todo.sortDeadline') }}</button>
             <div class="h-px bg-white/5"></div>
-            <a href="#" @click.prevent="applySort('priority')" class="flex items-center px-4 py-2.5 text-xs text-white/50 hover:text-white hover:bg-white/5 uppercase tracking-widest">{{ $t('todo.sortPriority') }}</a>
+            <button type="button" @click="applySort('priority')" class="w-full flex items-center px-4 py-2.5 text-xs text-white/50 hover:text-white hover:bg-white/5 uppercase tracking-widest transition-colors">{{ $t('todo.sortPriority') }}</button>
             <div class="h-px bg-white/5"></div>
-            <a href="#" @click.prevent="applySort('createdDate')" class="flex items-center px-4 py-2.5 text-xs text-white/50 hover:text-white hover:bg-white/5 uppercase tracking-widest">{{ $t('todo.sortCreated') }}</a>
+            <button type="button" @click="applySort('createdDate')" class="w-full flex items-center px-4 py-2.5 text-xs text-white/50 hover:text-white hover:bg-white/5 uppercase tracking-widest transition-colors">{{ $t('todo.sortCreated') }}</button>
           </div>
         </div>
       </div>
@@ -129,6 +129,7 @@ const filters = reactive({
 });
 const applyFilters = () => {
   emit("filter", { ...filters });
+  showFilterOptions.value = false;
 };
 
 const sortBy = ref("deadline");
