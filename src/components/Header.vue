@@ -1,16 +1,16 @@
 <template>
-  <header class="h-16 flex items-center justify-between px-4 md:px-8 border-b border-white/5 backdrop-blur-md relative z-20">
+  <header class="h-12 flex items-center justify-between px-5 border-b border-white/10 bg-gray-900 relative z-20">
     <div class="flex items-center gap-4">
       <!-- Hamburger Menu for Mobile -->
       <button 
         @click="$emit('toggle-sidebar')"
-        class="lg:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+        class="lg:hidden text-white/40 hover:text-white transition-colors"
         aria-label="Toggle Menu"
       >
-        <Menu class="w-6 h-6" />
+        <Menu class="w-5 h-5" />
       </button>
 
-      <h2 class="text-sm font-medium text-white/40 uppercase tracking-widest hidden sm:block">
+      <h2 class="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] hidden sm:block">
         {{ $route.path === '/' ? $t('header.dashboard') : $t('header.tracker') }}
       </h2>
     </div>
@@ -18,43 +18,46 @@
     <div class="flex items-center gap-4">
       <div v-if="session" class="relative">
         <button @click="toggleProfile" class="flex items-center gap-3 focus:outline-none group">
-          <div class="hidden md:block text-right">
-            <p class="text-sm font-medium text-white group-hover:text-cyan-400 transition-colors">
-              {{ session.user.user_metadata.full_name || 'User' }}
-            </p>
-          </div>
-          <div class="relative">
-            <img :src="session.user.user_metadata.avatar_url" alt="Avatar" class="w-9 h-9 rounded-full border border-white/10 group-hover:border-cyan-400 transition-all object-cover" referrerpolicy="no-referrer" />
-            <div class="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-gray-900"></div>
+          <p class="hidden md:block text-xs font-medium text-white/40 group-hover:text-white/70 transition-colors tracking-wide">
+            {{ session.user.user_metadata.full_name || 'User' }}
+          </p>
+          <!-- avatar with border line -->
+          <div class="relative border border-white/20 group-hover:border-cyan-400/50 transition-all rounded-full p-0.5">
+            <img :src="session.user.user_metadata.avatar_url" alt="Avatar" class="w-7 h-7 rounded-full object-cover" referrerpolicy="no-referrer" />
+            <div class="absolute bottom-0 right-0 w-1.5 h-1.5 bg-green-500 rounded-full border border-gray-900"></div>
           </div>
         </button>
 
-        <div v-if="isProfileOpen" @mouseleave="closeProfile" class="absolute right-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl py-2 transform origin-top-right transition-all z-50 overflow-hidden">
-          <div class="p-2 space-y-1">
-            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
-              <Settings class="w-4 h-4 group-hover:rotate-45 transition-transform" />
+        <!-- Dropdown -->
+        <div
+          v-if="isProfileOpen"
+          @mouseleave="closeProfile"
+          class="absolute right-0 mt-2 w-52 bg-gray-900 border border-white/10 shadow-xl z-50 overflow-hidden"
+        >
+          <div class="py-1">
+            <button class="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-white/50 hover:text-white hover:bg-white/5 transition-colors group uppercase tracking-widest">
+              <Settings class="w-3.5 h-3.5 group-hover:rotate-45 transition-transform" />
               <span>{{ $t('header.settings') }}</span>
             </button>
-            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
-              <Info class="w-4 h-4 group-hover:scale-110 transition-transform" />
+            <button class="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-white/50 hover:text-white hover:bg-white/5 transition-colors group uppercase tracking-widest">
+              <Info class="w-3.5 h-3.5" />
               <span>{{ $t('header.about') }}</span>
             </button>
-            
-            <div class="h-px bg-white/5 my-2"></div>
 
-            <!-- Moved Language Switcher here -->
-            <button @click="toggleLanguage" class="w-full flex items-center gap-3 px-3 py-2 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
-              <Globe class="w-4 h-4 group-hover:scale-110 transition-transform" />
-              <div class="flex-grow text-left">
-                <span>{{ $t('header.language') }}</span>
-              </div>
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/40">
+            <div class="h-px bg-white/10 my-1"></div>
+
+            <button @click="toggleLanguage" class="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-white/50 hover:text-white hover:bg-white/5 transition-colors group uppercase tracking-widest">
+              <Globe class="w-3.5 h-3.5" />
+              <span class="flex-grow text-left">{{ $t('header.language') }}</span>
+              <span class="font-bold text-[10px] px-1.5 py-0.5 border border-white/20 text-white/40">
                 {{ locale === 'id' ? 'ID' : 'EN' }}
               </span>
             </button>
 
-            <button @click="handleLogout" class="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">
-              <LogOut class="w-4 h-4" />
+            <div class="h-px bg-white/10 my-1"></div>
+
+            <button @click="handleLogout" class="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-red-400/70 hover:text-red-400 hover:bg-red-500/5 transition-colors uppercase tracking-widest">
+              <LogOut class="w-3.5 h-3.5" />
               {{ $t('header.signOut') }}
             </button>
           </div>

@@ -1,101 +1,101 @@
 <template>
-  <form @submit.prevent="addTask" class="space-y-4">
-    <div class="relative">
+  <form @submit.prevent="addTask" class="space-y-3">
+    <!-- Task Input -->
+    <div>
       <input
         v-model="newTask"
         type="text"
         :placeholder="$t('todo.form.placeholder')"
-        class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300"
+        class="w-full p-3 bg-transparent border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:border-cyan-400/50 transition-colors"
         required
       />
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div class="relative">
-        <input
-          v-model="deadline"
-          type="date"
-          class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300"
-          required
-        />
-      </div>
+
+    <!-- Grid Row: Date + Priority -->
+    <div class="grid grid-cols-2 gap-3">
+      <input
+        v-model="deadline"
+        type="date"
+        class="w-full p-3 bg-gray-900 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400/50 transition-colors"
+        required
+      />
       <div class="relative">
         <select
           v-model="priority"
-          class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300 appearance-none pr-10"
+          class="w-full p-3 bg-gray-900 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400/50 transition-colors appearance-none pr-8"
         >
-          <option value="High" class="bg-gray-800">{{ $t('todo.form.priorityHigh') }}</option>
-          <option value="Medium" class="bg-gray-800">{{ $t('todo.form.priorityMedium') }}</option>
-          <option value="Low" class="bg-gray-800">{{ $t('todo.form.priorityLow') }}</option>
+          <option value="High" class="bg-gray-900">{{ $t('todo.form.priorityHigh') }}</option>
+          <option value="Medium" class="bg-gray-900">{{ $t('todo.form.priorityMedium') }}</option>
+          <option value="Low" class="bg-gray-900">{{ $t('todo.form.priorityLow') }}</option>
         </select>
-        <ChevronDown
-          ref="dropdownIcon"
-          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 w-5 h-5 transition-transform duration-300"
-          @click="toggleDropdown"
-          :class="{ 'rotate-180': isDropdownOpen }"
-        />
+        <ChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 w-4 h-4 pointer-events-none" />
       </div>
     </div>
-    <div class="relative flex gap-2">
+
+    <!-- Category Row -->
+    <div class="flex gap-2">
       <div class="relative flex-grow">
         <select
           v-model="selectedCategoryId"
-          class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300 appearance-none pointer-events-auto"
+          class="w-full p-3 bg-gray-900 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400/50 transition-colors appearance-none pr-8"
         >
-          <option value="" disabled class="bg-gray-800">{{ $t('todo.form.categories') }}</option>
-          <option v-for="cat in categories" :key="cat.id" :value="cat.id" class="bg-gray-800">
+          <option value="" disabled class="bg-gray-900">{{ $t('todo.form.categories') }}</option>
+          <option v-for="cat in categories" :key="cat.id" :value="cat.id" class="bg-gray-900">
             {{ cat.name }}
           </option>
         </select>
-         <ChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 w-5 h-5 pointer-events-none" />
+        <ChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 w-4 h-4 pointer-events-none" />
       </div>
       <button 
         type="button"
         @click="isCreatingCategory = !isCreatingCategory"
-        class="p-3 bg-white/10 border border-white/20 text-white rounded-xl hover:bg-white/20 transition-colors"
+        class="p-3 border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors"
         title="Add New Category"
       >
-        <PlusIcon class="w-5 h-5" />
+        <PlusIcon class="w-4 h-4" />
       </button>
     </div>
 
     <!-- Create Category Mini-Form -->
-    <div v-if="isCreatingCategory" class="p-4 bg-white/5 rounded-xl border border-white/10 space-y-3">
-      <h3 class="text-sm font-medium text-white/80">New Category</h3>
+    <div v-if="isCreatingCategory" class="border border-white/10 p-3 space-y-2">
+      <p class="text-[10px] font-bold text-white/40 uppercase tracking-widest">New Category</p>
       <div class="flex gap-2">
         <input 
           v-model="newCategoryName"
           type="text"
-          placeholder="Category Name"
-          class="flex-grow p-2 bg-white/10 border border-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 text-sm"
+          placeholder="Name"
+          class="flex-grow p-2 bg-transparent border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-400/50 transition-colors"
         />
         <input 
           v-model="newCategoryColor"
           type="color"
-          class="w-10 h-10 p-1 bg-white/10 border border-white/20 rounded-lg cursor-pointer"
+          class="w-9 h-9 p-1 bg-transparent border border-white/10 cursor-pointer"
           title="Category Color"
         />
         <button 
           type="button"
           @click="handleCreateCategory"
-          class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-sm font-medium transition-colors"
+          class="px-3 py-2 bg-cyan-400 text-gray-900 text-xs font-bold uppercase tracking-widest hover:bg-cyan-300 transition-colors"
         >
           Save
         </button>
       </div>
     </div>
 
-    <div class="relative">
-      <textarea
-        v-model="notes"
-        :placeholder="$t('todo.form.notes')"
-        class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300"
-      ></textarea>
-    </div>
+    <!-- Notes -->
+    <textarea
+      v-model="notes"
+      :placeholder="$t('todo.form.notes')"
+      class="w-full p-3 bg-transparent border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:border-cyan-400/50 transition-colors resize-none"
+      rows="3"
+    ></textarea>
+
+    <!-- Submit -->
     <button
       type="submit"
-      class="w-full p-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-semibold uppercase tracking-wider hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2"
+      class="w-full p-3 bg-cyan-400 text-gray-900 text-xs font-bold uppercase tracking-widest hover:bg-cyan-300 active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2"
     >
-      <PlusIcon class="w-5 h-5" />
+      <PlusIcon class="w-4 h-4" />
       {{ $t('todo.form.add') }}
     </button>
   </form>
@@ -103,7 +103,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { PlusIcon, CalendarIcon, ChevronDown } from "lucide-vue-next";
+import { PlusIcon, ChevronDown } from "lucide-vue-next";
 
 const props = defineProps({
   categories: Array,
@@ -118,19 +118,18 @@ const notes = ref("");
 const isDropdownOpen = ref(false);
 const isCreatingCategory = ref(false);
 const newCategoryName = ref("");
-const newCategoryColor = ref("#3b82f6"); // Default blue
+const newCategoryColor = ref("#22d3ee");
 
-const dropdownIcon = ref(null);
 const emit = defineEmits(["add"]);
 
 const handleCreateCategory = async () => {
   if (newCategoryName.value.trim() && props.addCategory) {
     const newCat = await props.addCategory(newCategoryName.value, newCategoryColor.value);
     if (newCat) {
-      selectedCategoryId.value = newCat.id; // Auto-select new category
+      selectedCategoryId.value = newCat.id;
       isCreatingCategory.value = false;
       newCategoryName.value = "";
-      newCategoryColor.value = "#3b82f6";
+      newCategoryColor.value = "#22d3ee";
     }
   }
 };
@@ -141,7 +140,7 @@ const addTask = () => {
       text: newTask.value,
       deadline: deadline.value,
       priority: priority.value,
-      category_id: selectedCategoryId.value || null, // Emit category_id
+      category_id: selectedCategoryId.value || null,
       notes: notes.value,
     });
     newTask.value = "";
@@ -151,14 +150,4 @@ const addTask = () => {
     notes.value = "";
   }
 };
-
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
-};
 </script>
-
-<style click>
-select:focus + svg {
-  transform: rotate(180deg) translateY(50%);
-}
-</style>

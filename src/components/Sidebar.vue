@@ -1,47 +1,45 @@
 <template>
   <aside 
-    class="fixed lg:relative h-screen w-64 bg-gray-900/40 backdrop-blur-md border-r border-white/10 transition-all duration-300 z-30 flex flex-col"
+    class="sidebar fixed lg:relative h-screen w-56 bg-gray-900 border-r border-white/10 transition-all duration-300 z-30 flex flex-col"
     :class="[
       isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
     ]"
   >
-    <!-- Branding Section -->
-    <div class="p-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 flex items-center justify-center">
-          <img src="/wrdnika-new.png" alt="Logo" class="w-7 h-7 object-contain" />
-        </div>
-        <div>
-          <h1 class="text-xl font-bold text-white tracking-tight leading-none">Ingetinka</h1>
-          <!-- <p class="text-[10px] text-white/40 uppercase tracking-widest mt-1">by wrdnika</p> -->
-        </div>
-      </div>
+    <!-- Branding -->
+    <div class="px-5 py-4 border-b border-white/10 flex items-center gap-3">
+      <!-- <img src="/wrdnika-new.png" alt="Logo" class="w-6 h-6 object-contain opacity-90" /> -->
+      <h1 class="text-sm font-semibold text-white tracking-widest uppercase">Ingetinka</h1>
     </div>
 
-    <div class="h-px bg-white/10"></div>
-
-    <!-- Navigation Section -->
-    <nav class="flex-grow px-1 space-y-2 mt-2">
+    <!-- Navigation -->
+    <nav class="flex-grow py-4 px-3 space-y-1">
       <router-link
         to="/"
         @click="$emit('close')"
-        class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all duration-300 group"
-        active-class="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 text-cyan-400 border border-cyan-500/20"
+        class="nav-link flex items-center gap-3 px-3 py-2.5 text-white/50 hover:text-white transition-all duration-200 group relative"
+        active-class="nav-link-active"
       >
-        <ListTodo class="w-5 h-5 group-hover:scale-110 transition-transform" />
-        <span class="font-medium">{{ $t('sidebar.todoList') }}</span>
+        <div class="w-px h-full absolute left-0 top-0 accent-bar"></div>
+        <ListTodo class="w-4 h-4 flex-shrink-0" />
+        <span class="text-xs font-semibold uppercase tracking-widest">{{ $t('sidebar.todoList') }}</span>
       </router-link>
 
       <router-link
         to="/subscriptions"
         @click="$emit('close')"
-        class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all duration-300 group"
-        active-class="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 text-cyan-400 border border-cyan-500/20"
+        class="nav-link flex items-center gap-3 px-3 py-2.5 text-white/50 hover:text-white transition-all duration-200 group relative"
+        active-class="nav-link-active"
       >
-        <CreditCard class="w-5 h-5 group-hover:scale-110 transition-transform" />
-        <span class="font-medium">{{ $t('sidebar.subscriptions') }}</span>
+        <div class="w-px h-full absolute left-0 top-0 accent-bar"></div>
+        <CreditCard class="w-4 h-4 flex-shrink-0" />
+        <span class="text-xs font-semibold uppercase tracking-widest">{{ $t('sidebar.subscriptions') }}</span>
       </router-link>
     </nav>
+
+    <!-- Footer line -->
+    <div class="px-5 py-4 border-t border-white/10">
+      <p class="text-[10px] text-white/20 uppercase tracking-widest">by wrdnika</p>
+    </div>
   </aside>
 </template>
 
@@ -57,8 +55,21 @@ defineEmits(['close']);
 </script>
 
 <style scoped>
-.router-link-active {
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+.nav-link .accent-bar {
+  background: transparent;
+  transition: background 0.2s;
+}
+
+.nav-link-active {
+  color: rgb(34 211 238) !important;
+  background: rgba(34, 211, 238, 0.04);
+}
+
+.nav-link-active .accent-bar {
+  background: rgb(34 211 238);
+}
+
+.nav-link:hover .accent-bar {
+  background: rgba(255, 255, 255, 0.2);
 }
 </style>

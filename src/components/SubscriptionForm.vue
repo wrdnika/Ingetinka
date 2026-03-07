@@ -1,14 +1,14 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="space-y-4">
-    <!-- Name Input with Datalist -->
-    <div class="relative">
-      <label class="block text-sm font-medium text-white mb-1">{{ $t('subscription.form.serviceName') }}</label>
+  <form @submit.prevent="handleSubmit" class="space-y-3">
+    <!-- Name Input -->
+    <div>
+      <label class="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1.5">{{ $t('subscription.form.serviceName') }}</label>
       <input
         v-model="form.name"
         type="text"
         list="service-suggestions"
         placeholder="e.g. Netflix, Spotify"
-        class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300"
+        class="w-full p-3 bg-transparent border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:border-cyan-400/50 transition-colors"
         required
         @change="handleNameChange"
       />
@@ -26,75 +26,78 @@
       </datalist>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="grid grid-cols-2 gap-3">
       <!-- Price Input -->
-      <div class="relative">
-        <label class="block text-sm font-medium text-white mb-1">{{ $t('subscription.form.price') }}</label>
+      <div>
+        <label class="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1.5">{{ $t('subscription.form.price') }}</label>
         <div class="relative">
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">Rp</span>
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 text-xs">Rp</span>
           <input
             v-model="form.price"
             type="number"
             placeholder="0"
-            class="w-full pl-10 p-3 bg-white/10 border border-white/20 text-white rounded-xl placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300"
+            class="w-full pl-8 p-3 bg-transparent border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:border-cyan-400/50 transition-colors"
             required
           />
         </div>
       </div>
 
-      <!-- Cycle and First Payment Date -->
-      <div class="relative">
-        <label class="block text-sm font-medium text-white mb-1">{{ $t('subscription.form.cycle') }}</label>
-        <select
-          v-model="form.cycle"
-          class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300 appearance-none"
-        >
-          <option value="monthly" class="bg-gray-800">{{ $t('common.monthly') }}</option>
-          <option value="yearly" class="bg-gray-800">{{ $t('common.yearly') }}</option>
-          <option value="weekly" class="bg-gray-800">{{ $t('common.weekly') }}</option>
-        </select>
-        <ChevronDown class="absolute right-3 top-[38px] text-white/50 w-5 h-5 pointer-events-none" />
+      <!-- Cycle -->
+      <div>
+        <label class="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1.5">{{ $t('subscription.form.cycle') }}</label>
+        <div class="relative">
+          <select
+            v-model="form.cycle"
+            class="w-full p-3 bg-gray-900 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400/50 transition-colors appearance-none pr-8"
+          >
+            <option value="monthly" class="bg-gray-900">{{ $t('common.monthly') }}</option>
+            <option value="yearly" class="bg-gray-900">{{ $t('common.yearly') }}</option>
+            <option value="weekly" class="bg-gray-900">{{ $t('common.weekly') }}</option>
+          </select>
+          <ChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 w-4 h-4 pointer-events-none" />
+        </div>
       </div>
     </div>
 
     <!-- Category Dropdown -->
-    <div class="relative">
-      <label class="block text-sm font-medium text-white mb-1">{{ $t('subscription.form.category') }}</label>
+    <div>
+      <label class="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1.5">{{ $t('subscription.form.category') }}</label>
       <div class="relative">
         <select
           v-model="form.category_id"
-          class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300 appearance-none"
+          class="w-full p-3 bg-gray-900 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400/50 transition-colors appearance-none pr-8"
           required
           @change="handleCategoryChange"
         >
-          <option value="" disabled class="bg-gray-800">{{ $t('subscription.form.selectCategory') }}</option>
-          <option v-for="cat in categories" :key="cat.id" :value="cat.id" class="bg-gray-800">
+          <option value="" disabled class="bg-gray-900">{{ $t('subscription.form.selectCategory') }}</option>
+          <option v-for="cat in categories" :key="cat.id" :value="cat.id" class="bg-gray-900">
             {{ cat.name }}
           </option>
-          <option value="new" class="bg-cyan-900 font-bold">{{ $t('subscription.form.addNewCategory') }}</option>
+          <option value="new" class="bg-gray-900 text-cyan-400 font-bold">{{ $t('subscription.form.addNewCategory') }}</option>
         </select>
-        <ChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 w-5 h-5 pointer-events-none" />
+        <ChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 w-4 h-4 pointer-events-none" />
       </div>
     </div>
 
     <!-- First Payment Date -->
-    <div class="relative">
-      <label class="block text-sm font-medium text-white mb-1">{{ $t('subscription.form.firstPayment') }}</label>
+    <div>
+      <label class="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1.5">{{ $t('subscription.form.firstPayment') }}</label>
       <input
         v-model="form.first_payment_date"
         type="date"
-        class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300"
+        class="w-full p-3 bg-gray-900 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400/50 transition-colors"
         required
       />
     </div>
 
     <!-- Notes -->
-    <div class="relative">
-      <label class="block text-sm font-medium text-white mb-1">{{ $t('subscription.form.notes') }}</label>
+    <div>
+      <label class="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1.5">{{ $t('subscription.form.notes') }}</label>
       <textarea
         v-model="form.notes"
         placeholder="e.g. Shared with family"
-        class="w-full p-3 bg-white/10 border border-white/20 text-white rounded-xl placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300 min-h-[80px]"
+        class="w-full p-3 bg-transparent border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:border-cyan-400/50 transition-colors resize-none"
+        rows="2"
       ></textarea>
     </div>
 
@@ -102,9 +105,9 @@
     <button
       type="submit"
       :disabled="loading"
-      class="w-full p-3 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/20 rounded-xl font-semibold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      class="w-full p-3 bg-cyan-400 text-gray-900 text-xs font-bold uppercase tracking-widest hover:bg-cyan-300 active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
+      <Loader2 v-if="loading" class="w-4 h-4 animate-spin" />
       <span v-else>{{ subscription ? $t('subscription.form.update') : $t('subscription.form.save') }}</span>
     </button>
   </form>

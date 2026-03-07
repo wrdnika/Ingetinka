@@ -2,23 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tambahkan di bawah @tailwind utilities */
+/* ── Global Line/Grid Aesthetic ──────────────────────────────── */
 
-/* Kustomisasi Scrollbar untuk area TodoList */
+/* Base: remove rounded corners globally for consistent flat look */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Thin, minimal scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px; /* Lebar scrollbar tipis */
+  width: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05); /* Track transparan halus */
-  border-radius: 4px;
+  background: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2); /* Thumb putih transparan */
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4); /* Lebih terang saat di-hover */
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Date input color fix for dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.4);
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(0.7);
+}
+
+/* Color input clean look */
+input[type="color"] {
+  padding: 2px;
+  cursor: pointer;
+}
+
+/* Remove default select arrow on some browsers */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
