@@ -68,7 +68,6 @@ const iconSizeClasses = computed(() => {
   }
 });
 
-// Brand Domain Map
 const brandDomains = {
   netflix: 'netflix.com',
   aws: 'aws.amazon.com',
