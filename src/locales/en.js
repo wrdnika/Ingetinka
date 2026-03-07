@@ -2,6 +2,7 @@ export default {
     sidebar: {
         todoList: 'Todo List',
         subscriptions: 'Subscriptions',
+        calendar: 'Calendar',
         logout: 'Logout'
     },
     header: {

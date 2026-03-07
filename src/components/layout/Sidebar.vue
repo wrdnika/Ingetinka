@@ -10,14 +10,25 @@
       <!-- <img src="/wrdnika-new.png" alt="Logo" class="w-6 h-6 object-contain opacity-90" /> -->
       <h1 class="text-[11px] font-bold text-white uppercase tracking-[0.3em]">Ingetinka</h1>
     </div>
-
+    
     <!-- Navigation -->
     <nav class="flex-grow  space-y-1">
       <router-link
-        to="/"
+        to="/calendar"
         @click="$emit('close')"
         class="nav-link flex items-center gap-3 px-3 py-2.5 text-white/50 hover:text-white transition-all duration-200 group relative"
         active-class="nav-link-active"
+      >
+        <div class="w-px h-full absolute left-0 top-0 accent-bar"></div>
+        <Calendar class="w-4 h-4 flex-shrink-0" />
+        <span class="text-[10px] font-bold uppercase tracking-[0.2em]">{{ $t('sidebar.calendar') }}</span>
+      </router-link>
+
+      <router-link
+      to="/"
+      @click="$emit('close')"
+      class="nav-link flex items-center gap-3 px-3 py-2.5 text-white/50 hover:text-white transition-all duration-200 group relative"
+      active-class="nav-link-active"
       >
         <div class="w-px h-full absolute left-0 top-0 accent-bar"></div>
         <ListTodo class="w-4 h-4 flex-shrink-0" />
@@ -44,7 +55,7 @@
 </template>
 
 <script setup>
-import { ListTodo, CreditCard } from 'lucide-vue-next';
+import { ListTodo, CreditCard, Calendar } from 'lucide-vue-next';
 
 defineProps({
   session: Object,

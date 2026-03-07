@@ -14,6 +14,11 @@ export function useAuth() {
       provider: 'google',
       options: {
         redirectTo: window.location.origin,
+        scopes: 'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.readonly',
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
       },
     });
   };
@@ -22,6 +27,8 @@ export function useAuth() {
     await supabase.auth.signOut();
   };
 
+
+
   onMounted(() => {
     fetchSession();
     supabase.auth.onAuthStateChange((_, _session) => {
@@ -29,9 +36,16 @@ export function useAuth() {
     });
   });
 
+  const getGoogleToken = async () => {
+    const { data } = await supabase.auth.getSession();
+    return data.session?.provider_token;
+  };
+
   return {
     session,
     handleLogin,
     handleLogout,
+    getGoogleToken,
+
   };
 }

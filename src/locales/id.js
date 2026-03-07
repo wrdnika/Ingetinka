@@ -2,6 +2,7 @@ export default {
     sidebar: {
         todoList: 'Daftar Tugas',
         subscriptions: 'Langganan',
+        calendar: 'Kalender',
         logout: 'Keluar'
     },
     header: {
