@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import SubscriptionList from '../components/SubscriptionList.vue';
+import SubscriptionList from '../components/subscription/SubscriptionList.vue';
 
 const props = defineProps({
   session: Object

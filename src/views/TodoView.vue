@@ -23,9 +23,9 @@
 <script setup>
 import { toRef } from 'vue';
 import { useTasks } from '../composables/useTasks';
-import TodoList from '../components/TodoList.vue';
-import Modal from '../components/Modal.vue';
-import TodoForm from '../components/TodoForm.vue';
+import TodoList from '../components/todo/TodoList.vue';
+import Modal from '../components/common/Modal.vue';
+import TodoForm from '../components/todo/TodoForm.vue';
 
 const props = defineProps({
   session: Object

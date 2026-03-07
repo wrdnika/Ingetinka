@@ -106,10 +106,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { supabase } from '../supabase';
+import { supabase } from '../../services/supabase';
 import { CreditCard, Edit2, Trash2, Plus } from 'lucide-vue-next';
 import SubscriptionLogo from './SubscriptionLogo.vue';
-import Modal from './Modal.vue';
+import Modal from '../common/Modal.vue';
 import SubscriptionForm from './SubscriptionForm.vue';
 
 const props = defineProps({

@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import i18n from "./i18n";
+import i18n from "./plugins/i18n";
 import "./style.css";
 import * as LucideIcons from "lucide-vue-next";
 import { registerSW } from "virtual:pwa-register";

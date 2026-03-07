@@ -59,9 +59,9 @@
 <script setup>
 import { ref } from 'vue';
 import { useAuth } from './composables/useAuth';
-import Login from './components/Login.vue';
-import Header from './components/Header.vue';
-import Sidebar from './components/Sidebar.vue';
+import Login from './components/auth/Login.vue';
+import Header from './components/layout/Header.vue';
+import Sidebar from './components/layout/Sidebar.vue';
 
 const { session, handleLogin, handleLogout } = useAuth();
 const isSidebarOpen = ref(false);

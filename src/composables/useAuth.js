@@ -1,5 +1,5 @@
 import { ref, onMounted } from 'vue';
-import { supabase } from '../supabase';
+import { supabase } from '../services/supabase';
 
 export function useAuth() {
   const session = ref(null);

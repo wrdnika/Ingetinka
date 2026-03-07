@@ -1,5 +1,5 @@
 import { ref, computed, watchEffect } from 'vue';
-import { supabase } from '../supabase';
+import { supabase } from '../services/supabase';
 
 export function useTasks(session) {
   const tasks = ref([]);

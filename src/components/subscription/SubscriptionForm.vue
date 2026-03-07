@@ -115,7 +115,7 @@
 
 <script setup>
 import { ref, onMounted, reactive, watch } from 'vue';
-import { supabase } from '../supabase';
+import { supabase } from '../../services/supabase';
 import { ChevronDown, Loader2 } from 'lucide-vue-next';
 
 const props = defineProps({
