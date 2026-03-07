@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
 /* ── Asymmetric Notch Button (pojok kiri-atas & kanan-bawah rounded) ── */
 .btn-notch {
   border-top-left-radius: 8px;

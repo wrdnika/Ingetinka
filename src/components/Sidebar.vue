@@ -6,13 +6,13 @@
     ]"
   >
     <!-- Branding -->
-    <div class="px-5 py-4 border-b border-white/10 flex items-center gap-3">
+    <div class="h-12 px-4 border-b border-white/10 flex items-center gap-3">
       <!-- <img src="/wrdnika-new.png" alt="Logo" class="w-6 h-6 object-contain opacity-90" /> -->
-      <h1 class="text-sm font-semibold text-white tracking-widest uppercase">Ingetinka</h1>
+      <h1 class="text-[11px] font-bold text-white uppercase tracking-[0.3em]">Ingetinka</h1>
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-grow py-4 px-3 space-y-1">
+    <nav class="flex-grow  space-y-1">
       <router-link
         to="/"
         @click="$emit('close')"
@@ -21,7 +21,7 @@
       >
         <div class="w-px h-full absolute left-0 top-0 accent-bar"></div>
         <ListTodo class="w-4 h-4 flex-shrink-0" />
-        <span class="text-xs font-semibold uppercase tracking-widest">{{ $t('sidebar.todoList') }}</span>
+        <span class="text-[10px] font-bold uppercase tracking-[0.2em]">{{ $t('sidebar.todoList') }}</span>
       </router-link>
 
       <router-link
@@ -32,7 +32,7 @@
       >
         <div class="w-px h-full absolute left-0 top-0 accent-bar"></div>
         <CreditCard class="w-4 h-4 flex-shrink-0" />
-        <span class="text-xs font-semibold uppercase tracking-widest">{{ $t('sidebar.subscriptions') }}</span>
+        <span class="text-[10px] font-bold uppercase tracking-[0.2em]">{{ $t('sidebar.subscriptions') }}</span>
       </router-link>
     </nav>
 

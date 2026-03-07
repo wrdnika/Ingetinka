@@ -1,14 +1,21 @@
 <template>
   <div class="h-full flex flex-col">
     <!-- Summary Header -->
-    <div class="flex-shrink-0 border-b border-white/10 p-4 md:p-6">
-      <p class="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-1">{{ $t('subscription.totalExpense') }}</p>
+    <div class="flex-shrink-0 flex justify-between border-b border-white/10 p-4 md:p-6">
       <div class="flex items-baseline gap-2">
+        <p class="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-1">{{ $t('subscription.total') }}</p>
         <span class="text-2xl md:text-3xl font-bold text-white tracking-tight">
           {{ formatPrice(totalMonthlyExpense) }}
         </span>
         <span class="text-white/30 text-xs">/ {{ $t('subscription.month') }}</span>
       </div>
+      <button
+        @click="openAddModal"
+        class="border border-cyan-400/40 text-cyan-400 btn-notch mr-4 mt-2 px-3 py-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:bg-cyan-400/5 hover:border-cyan-400/70 transition-all duration-200"
+      >
+        <Plus class="w-3.5 h-3.5" />
+        <span class="hidden sm:inline">{{ $t('subscription.add') }}</span>
+      </button>
     </div>
 
     <!-- Loading State -->
@@ -66,13 +73,13 @@
         <!-- Actions -->
         <div class="col-span-1 flex items-center gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button 
-            @click.stop="$emit('edit', sub)" 
+            @click.stop="handleEdit(sub)" 
             class="text-white/30 hover:text-cyan-400 transition-colors"
           >
             <Edit2 class="w-3.5 h-3.5" />
           </button>
           <button 
-            @click.stop="$emit('delete', sub)" 
+            @click.stop="handleDelete(sub)" 
             class="text-white/30 hover:text-red-400 transition-colors"
           >
             <Trash2 class="w-3.5 h-3.5" />
@@ -80,23 +87,39 @@
         </div>
       </div>
     </div>
+
+    <!-- Form Modal (Add/Edit) -->
+    <Modal 
+      :show="showFormModal" 
+      :title="editingSubscription ? $t('subscription.edit') : $t('subscription.add')"
+      @close="closeModal"
+    >
+      <SubscriptionForm 
+        :session="session" 
+        :subscription="editingSubscription"
+        @added="handleSuccess" 
+        @updated="handleSuccess"
+      />
+    </Modal>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { supabase } from '../supabase';
-import { CreditCard, Edit2, Trash2 } from 'lucide-vue-next';
+import { CreditCard, Edit2, Trash2, Plus } from 'lucide-vue-next';
 import SubscriptionLogo from './SubscriptionLogo.vue';
+import Modal from './Modal.vue';
+import SubscriptionForm from './SubscriptionForm.vue';
 
 const props = defineProps({
   session: Object
 });
 
-const emit = defineEmits(['edit', 'delete']);
-
 const subscriptions = ref([]);
 const loading = ref(true);
+const showFormModal = ref(false);
+const editingSubscription = ref(null);
 
 const fetchSubscriptions = async () => {
   if (!props.session) return;
@@ -120,6 +143,42 @@ const fetchSubscriptions = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const openAddModal = () => {
+  editingSubscription.value = null;
+  showFormModal.value = true;
+};
+
+const handleEdit = (sub) => {
+  editingSubscription.value = sub;
+  showFormModal.value = true;
+};
+
+const handleDelete = async (sub) => {
+  if (!confirm(`Are you sure you want to delete ${sub.name}?`)) return;
+
+  try {
+    const { error } = await supabase
+      .from('subscriptions')
+      .delete()
+      .eq('id', sub.id);
+    
+    if (error) throw error;
+    fetchSubscriptions();
+  } catch (error) {
+    alert('Error deleting subscription: ' + error.message);
+  }
+};
+
+const handleSuccess = () => {
+  closeModal();
+  fetchSubscriptions();
+};
+
+const closeModal = () => {
+  showFormModal.value = false;
+  editingSubscription.value = null;
 };
 
 const totalMonthlyExpense = computed(() => {

@@ -16,7 +16,13 @@
         </div>
 
         <!-- Add Task Button -->
-        <AddTaskButton @open-modal="openModal" />
+        <button
+          @click="openModal"
+          class="flex items-center gap-2 px-3 py-2 border border-cyan-400/40 text-cyan-400 btn-notch hover:bg-cyan-400/8 hover:border-cyan-400/70 transition-all duration-200"
+        >
+          <Plus class="w-3.5 h-3.5" />
+          <span class="hidden sm:inline text-[10px] font-bold uppercase tracking-widest">{{ $t('todo.create') }}</span>
+        </button>
 
         <!-- Filter Button -->
         <div class="relative">
@@ -94,7 +100,6 @@
 import { ref, reactive } from "vue";
 import { ArrowUpDown, Filter, Search, ListTodo } from "lucide-vue-next";
 import TodoItem from "./TodoItem.vue";
-import AddTaskButton from "./AddTaskButton.vue";
 
 const props = defineProps(["tasks", "categories"]);
 const emit = defineEmits([

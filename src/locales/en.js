@@ -26,7 +26,7 @@ export default {
         title: 'Subscriptions',
         add: 'Add Subscription',
         edit: 'Edit Subscription',
-        totalExpense: 'Total Monthly Expense',
+        total: 'Total',
         month: 'month',
         noActive: 'No active subscriptions found.',
         next: 'Next',

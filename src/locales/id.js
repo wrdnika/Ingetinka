@@ -26,7 +26,7 @@ export default {
         title: 'Langganan',
         add: 'Tambah Langganan',
         edit: 'Edit Langganan',
-        totalExpense: 'Total Pengeluaran Bulanan',
+        total: 'Total',
         month: 'bulan',
         noActive: 'Tidak ada langganan aktif ditemukan.',
         next: 'Berikutnya',
