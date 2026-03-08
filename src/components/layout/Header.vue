@@ -11,7 +11,7 @@
       </button>
 
       <h2 class="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] hidden sm:block">
-        {{ $route.path === '/' ? $t('header.dashboard') : $t('header.tracker') }}
+        {{ $route.path === '/' ? $t('header.dashboard') : ($route.path === '/calendar' ? $t('sidebar.calendar') : $t('header.tracker')) }}
       </h2>
     </div>
 

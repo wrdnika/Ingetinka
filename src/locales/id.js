@@ -1,6 +1,6 @@
 export default {
     sidebar: {
-        todoList: 'Daftar Tugas',
+        taskList: 'Daftar Tugas',
         subscriptions: 'Langganan',
         calendar: 'Kalender',
         logout: 'Keluar'

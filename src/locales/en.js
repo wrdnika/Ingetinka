@@ -1,6 +1,6 @@
 export default {
     sidebar: {
-        todoList: 'Todo List',
+        taskList: 'Task List',
         subscriptions: 'Subscriptions',
         calendar: 'Calendar',
         logout: 'Logout'

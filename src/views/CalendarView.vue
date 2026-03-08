@@ -1,28 +1,28 @@
 <template>
-  <div class="h-full flex flex-col p-4 md:p-6 pb-20 lg:pb-6 relative z-10 selection-area">
+  <div class="h-full flex flex-col">
     <!-- Header Page -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 flex-shrink-0 animate-fade-in delay-100">
-      <div class="flex items-center gap-3">
-        <div class="h-10 w-1 bg-cyan-400 rounded-full glow-effect"></div>
-        <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
-          <Calendar class="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
+    <div class="flex-shrink-0 flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/10 p-4 md:p-6 gap-4 animate-fade-in delay-100">
+      <div class="flex items-baseline gap-2">
+        <!-- <p class="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-1 hidden md:block">Google</p> -->
+        <span class="text-2xl md:text-3xl font-bold text-white tracking-tight">
           {{ $t('sidebar.calendar') }}
-        </h1>
+        </span>
       </div>
 
-      <div class="flex items-center justify-between md:justify-end gap-2 bg-[#1e293b]/80 p-1.5 rounded-xl border border-white/10 shadow-lg backdrop-blur-md" v-if="token">
-        <button @click="prevMonth" class="p-2 hover:bg-white/10 rounded-lg transition-colors text-white" title="Bulan Sebelumnya">
-          <ChevronLeft class="w-5 h-5"/>
-        </button>
-        <div class="text-sm md:text-base font-bold text-white min-w-[130px] md:min-w-[150px] text-center capitalize tracking-wide" style="font-variant-numeric: tabular-nums;">
-          {{ currentMonthName }} {{ currentDate.getFullYear() }}
+      <div class="flex items-center justify-between md:justify-end gap-3" v-if="token">
+        <div class="flex items-center gap-2">
+          <button @click="prevMonth" class="p-2 border border-white/10 btn-notch text-white/40 hover:text-white hover:border-white/30 transition-colors" title="Bulan Sebelumnya">
+            <ChevronLeft class="w-4 h-4"/>
+          </button>
+          <div class="text-sm md:text-base font-bold text-white min-w-[120px] md:min-w-[140px] text-center capitalize tracking-wide" style="font-variant-numeric: tabular-nums;">
+            {{ currentMonthName }} {{ currentDate.getFullYear() }}
+          </div>
+          <button @click="nextMonth" class="p-2 border border-white/10 btn-notch text-white/40 hover:text-white hover:border-white/30 transition-colors" title="Bulan Berikutnya">
+            <ChevronRight class="w-4 h-4"/>
+          </button>
         </div>
-        <button @click="nextMonth" class="p-2 hover:bg-white/10 rounded-lg transition-colors text-white" title="Bulan Berikutnya">
-          <ChevronRight class="w-5 h-5"/>
-        </button>
-        <div class="w-px h-6 bg-white/10 mx-1"></div>
-        <button @click="goToToday" class="px-3 md:px-4 py-2 hover:bg-white/10 text-xs md:text-sm font-medium text-white rounded-lg transition-colors">
-          Hari Ini
+        <button @click="goToToday" class="px-2 py-1 border border-cyan-400/40 text-cyan-400 btn-notch hover:bg-cyan-400/10 hover:border-cyan-400/70 transition-colors">
+          <span class="text-[10px] font-bold uppercase tracking-widest">Hari Ini</span>
         </button>
       </div>
     </div>
@@ -50,7 +50,7 @@
     </div>
 
     <!-- Google Calendar Grid View -->
-    <div v-else class="flex-grow flex flex-col min-h-0 bg-[#0f172a]/80 border border-white/10 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl animate-fade-in delay-300 relative">
+    <div v-else class="flex-grow flex flex-col min-h-0 bg-transparent animate-fade-in delay-300 relative">
       <!-- Days header -->
       <div class="grid grid-cols-7 border-b border-white/10 bg-black/40 flex-shrink-0">
         <div v-for="dayName in ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']" :key="dayName" class="py-2 md:py-3 text-center text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest">
@@ -63,11 +63,10 @@
         <div 
           v-for="(day, idx) in calendarGrid" 
           :key="idx"
-          class="border-b border-r border-white/5 p-1 transition-colors hover:bg-white/5 flex flex-col relative group"
+          class="border-b border-r border-white/10 p-1 transition-colors hover:bg-white/5 flex flex-col relative group"
           :class="[
             idx % 7 === 6 ? 'border-r-0' : '',
-            idx >= 35 ? 'border-b-0' : '',
-            !day.isCurrentMonth ? 'bg-black/20' : ''
+            !day.isCurrentMonth ? 'bg-black/10' : ''
           ]"
         >
            <div class="flex justify-center mb-1 mt-0.5">

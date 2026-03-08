@@ -1,6 +1,6 @@
 <template>
   <aside 
-    class="sidebar fixed lg:relative h-screen w-56 bg-gray-900 border-r border-white/10 transition-all duration-300 z-30 flex flex-col"
+    class="sidebar fixed lg:relative h-full w-56 bg-gray-900 border-r border-white/10 transition-all duration-300 z-30 flex flex-col"
     :class="[
       isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
     ]"
@@ -12,7 +12,7 @@
     </div>
     
     <!-- Navigation -->
-    <nav class="flex-grow  space-y-1">
+    <nav class="flex-grow overflow-y-auto custom-scrollbar space-y-1 py-2">
       <router-link
         to="/calendar"
         @click="$emit('close')"
@@ -32,7 +32,7 @@
       >
         <div class="w-px h-full absolute left-0 top-0 accent-bar"></div>
         <ListTodo class="w-4 h-4 flex-shrink-0" />
-        <span class="text-[10px] font-bold uppercase tracking-[0.2em]">{{ $t('sidebar.todoList') }}</span>
+        <span class="text-[10px] font-bold uppercase tracking-[0.2em]">{{ $t('sidebar.taskList') }}</span>
       </router-link>
 
       <router-link
