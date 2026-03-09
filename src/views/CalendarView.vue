@@ -175,16 +175,37 @@ const formatDateObj = (date) => {
 const eventsByDate = computed(() => {
   const map = {};
   events.value.forEach(event => {
-    let dateStr = '';
-    if (event.start.date) {
-      dateStr = event.start.date;
-    } else if (event.start.dateTime) {
-      dateStr = formatDateObj(new Date(event.start.dateTime));
-    }
+    let start, end;
     
-    if (dateStr) {
+    if (event.start.date) {
+      // All-day event
+      start = new Date(event.start.date);
+      // For all-day events, the end date is exclusive in Google Calendar API
+      // So we subtract 1 day to get the actual last day of the event
+      end = new Date(event.end.date);
+      end.setDate(end.getDate() - 1);
+    } else if (event.start.dateTime) {
+      // Timed event
+      start = new Date(event.start.dateTime);
+      end = new Date(event.end.dateTime);
+    } else {
+      return;
+    }
+
+    // Iterate through each day in the range
+    let current = new Date(start);
+    // Set current to start of day for comparison
+    current.setHours(0, 0, 0, 0);
+    const last = new Date(end);
+    last.setHours(0, 0, 0, 0);
+
+    while (current <= last) {
+      const dateStr = formatDateObj(current);
       if (!map[dateStr]) map[dateStr] = [];
       map[dateStr].push(event);
+      
+      // Move to next day
+      current.setDate(current.getDate() + 1);
     }
   });
   return map;
