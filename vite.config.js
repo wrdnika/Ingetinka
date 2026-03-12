@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg", "robots.txt", "apple-touch-icon.png"],
       manifest: {
-        name: "wrdnika - ToDo List App",
-        short_name: "todoinka",
-        description: "A beautiful To-Do List with PWA support",
+        name: "Ingetinka - Reminder App",
+        short_name: "Ingetinka",
+        description: "Minimalist Reminder App with PWA support",
         theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",
