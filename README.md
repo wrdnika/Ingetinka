@@ -1,25 +1,25 @@
-# ✅ To-Do List App
+# Ingetinka - Reminder App
 
-A **To-Do List App** built with **Vue 3**, **Vite**, and **Tailwind CSS**.  
-This project is designed with a glassmorphism style, and includes powerful productivity features like priorities, deadlines, editing, reminders, and more.
+**Ingetinka** is a minimalist **Reminder App** built with **Vue 3**, **Vite**, and **Tailwind CSS**.  
+Hosted at: [ingetinka.wrdnika.my.id](https://ingetinka.wrdnika.my.id)
 
-![Preview](image.png)
-
----
-
-## ✨ Features
-
-- ✅ Add, Edit, Delete Tasks
-- 🔁 Mark as Completed
-- 🗓 Set Deadlines
-- ⚡ Set Task Priority (High, Medium, Low)
-- 🔔 Reminder & Notification Ready (WIP)
-- 💅 Elegant Glassmorphism UI
-- 📱 Fully Responsive
+This project features a clean **Line/Grid/Notch** flat aesthetic. It includes powerful productivity features like priorities, deadlines, reminders, and subscription tracking.
 
 ---
 
-## 🚀 Tech Stack
+## Features
+
+- Add, Edit, Delete Reminders/Tasks
+- Mark as Completed
+- Set Deadlines & Recurring Cycles
+- Set Priority (High, Medium, Low)
+- Reminder & Notification System
+- Flat Line/Grid Aesthetic
+- Fully Responsive & PWA Ready
+
+---
+
+## Tech Stack
 
 - [Vue 3](https://vuejs.org/)
 - [Vite](https://vitejs.dev/)
@@ -27,12 +27,12 @@ This project is designed with a glassmorphism style, and includes powerful produ
 
 ---
 
-## 📦 Installation
+## Installation
 
 ```bash
 # Clone the repo
-git clone https://github.com/username/todo-vue-fancy.git
-cd todo-vue-fancy
+git clone https://github.com/wrdnika/ingetinka.git
+cd ingetinka
 
 # Install dependencies
 npm install
