@@ -15,7 +15,7 @@
     </div>
     
     <Modal :show="showModal" :title="$t('todo.modalTitle')" @close="showModal = false">
-      <TodoForm :categories="todoCategories" :add-category="addCategory" @add="addTask" />
+      <TodoForm :categories="todoCategories" :add-category="addCategory" :calendar-sync-error="calendarSyncError" @add="addTask" />
     </Modal>
   </div>
 </template>
@@ -35,6 +35,7 @@ const {
   filteredTasks,
   todoCategories,
   showModal,
+  calendarSyncError,
   addTask,
   addCategory,
   toggleTask,

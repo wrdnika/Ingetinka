@@ -98,16 +98,33 @@
       <PlusIcon class="w-4 h-4" />
       {{ $t('todo.form.add') }}
     </button>
+
+    <!-- Google Calendar Sync Indicator -->
+    <div
+      v-if="calendarSyncError"
+      class="flex items-center gap-1.5 text-amber-400/80 text-[10px]"
+    >
+      <CalendarIcon class="w-3 h-3 shrink-0" />
+      <span>Gagal sinkron ke Google Calendar — task tetap tersimpan.</span>
+    </div>
+    <div
+      v-else
+      class="flex items-center gap-1.5 text-white/30 text-[10px]"
+    >
+      <CalendarIcon class="w-3 h-3 shrink-0" />
+      <span>Task akan disinkronkan ke Google Calendar</span>
+    </div>
   </form>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { PlusIcon, ChevronDown } from "lucide-vue-next";
+import { PlusIcon, ChevronDown, CalendarIcon } from "lucide-vue-next";
 
 const props = defineProps({
   categories: Array,
-  addCategory: Function
+  addCategory: Function,
+  calendarSyncError: { type: String, default: null },
 });
 
 const newTask = ref("");

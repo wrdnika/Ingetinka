@@ -1,11 +1,13 @@
 import { ref, computed, watchEffect } from 'vue';
 import { supabase } from '../services/supabase';
+import { createGoogleEvent, findGoogleEventId, updateGoogleEvent, deleteGoogleEvent } from '../services/googleCalendar';
 
 export function useTasks(session) {
   const tasks = ref([]);
   const todoCategories = ref([]);
   const showModal = ref(false);
   const searchQuery = ref('');
+  const calendarSyncError = ref(null); // null = no error, string = error message
   const filterCriteria = ref({
     status: 'all',
     priority: 'all',
@@ -100,11 +102,22 @@ export function useTasks(session) {
 
     if (error) {
       console.error('Error adding task:', error);
-    } else {
-      if (data && data.length > 0) {
-        tasks.value.unshift(data[0]);
-      }
-      showModal.value = false;
+      return;
+    }
+
+    if (data && data.length > 0) {
+      tasks.value.unshift(data[0]);
+    }
+    showModal.value = false;
+
+    // Sync to Google Calendar (non-blocking: task is already saved to Supabase)
+    calendarSyncError.value = null;
+    const token = session.value?.provider_token;
+    try {
+      await createGoogleEvent(token, { text, deadline }, data[0].id);
+    } catch (calendarErr) {
+      console.warn('Google Calendar sync failed (task is still saved):', calendarErr.message);
+      calendarSyncError.value = calendarErr.message;
     }
   };
 
@@ -129,6 +142,18 @@ export function useTasks(session) {
   const removeTask = async (id) => {
     const previousTasks = [...tasks.value];
     tasks.value = tasks.value.filter((t) => t.id !== id);
+
+    // Sync to Google Calendar (DELETE)
+    const token = session.value?.provider_token;
+    const syncDelete = async () => {
+      try {
+        const gcalId = await findGoogleEventId(token, id);
+        if (gcalId) await deleteGoogleEvent(token, gcalId);
+      } catch (err) {
+        console.warn('Failed to delete Google Calendar event:', err.message);
+      }
+    };
+    syncDelete(); // Non-blocking
 
     const { error } = await supabase.from('todos').delete().eq('id', id);
 
@@ -165,6 +190,23 @@ export function useTasks(session) {
       if (error) {
         console.error('Error updating task:', error);
         tasks.value[index] = oldTask;
+      } else {
+        // Sync to Google Calendar (UPDATE)
+        const token = session.value?.provider_token;
+        const syncUpdate = async () => {
+          try {
+            const gcalId = await findGoogleEventId(token, updatedTask.id);
+            if (gcalId) {
+              await updateGoogleEvent(token, gcalId, { text: updatedTask.text, deadline: updatedTask.deadline });
+            } else {
+              // If not found (maybe created before sync), try creating it
+              await createGoogleEvent(token, { text: updatedTask.text, deadline: updatedTask.deadline }, updatedTask.id);
+            }
+          } catch (err) {
+            console.warn('Failed to sync update to Google Calendar:', err.message);
+          }
+        };
+        syncUpdate(); // Non-blocking
       }
     }
   };
@@ -232,6 +274,7 @@ export function useTasks(session) {
     searchQuery,
     filterCriteria,
     sortBy,
+    calendarSyncError,
     addTask,
     addCategory,
     toggleTask,
