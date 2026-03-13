@@ -17,7 +17,7 @@ export function useAuth() {
         scopes: 'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.readonly',
         queryParams: {
           access_type: 'offline',
-          prompt: 'consent',
+          // prompt: 'consent',
         },
       },
     });

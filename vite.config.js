@@ -19,17 +19,12 @@ export default defineConfig({
         start_url: ".",
         icons: [
           {
-            src: "wrdnika-192.PNG",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "wrdnika-512.PNG",
+            src: "INGETINKA-white.png",
             sizes: "512x512",
             type: "image/png",
           },
           {
-            src: "wrdnika-512.PNG",
+            src: "INGETINKA-white.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",

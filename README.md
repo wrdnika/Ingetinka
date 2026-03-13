@@ -1,19 +1,19 @@
 # Ingetinka - Reminder App
 
-**Ingetinka** is a minimalist **Reminder App** built with **Vue 3**, **Vite**, and **Tailwind CSS**.  
-Hosted at: [ingetinka.wrdnika.my.id](https://ingetinka.wrdnika.my.id)
+**Ingetinka** is a minimalist **Reminder App** built with **Vue 3**, **Vite**, and **Tailwind CSS**.
 
-This project features a clean **Line/Grid/Notch** flat aesthetic. It includes powerful productivity features like priorities, deadlines, reminders, and subscription tracking.
+Ingetinka helps you stay productive with a clean Line/Grid/Notch flat aesthetic, recurring subscription tracking, and Google Calendar integration.
 
 ---
 
 ## Features
 
 - Add, Edit, Delete Reminders/Tasks
+- Google Calendar Integration (Sync Todo & Subscriptions)
 - Mark as Completed
 - Set Deadlines & Recurring Cycles
 - Set Priority (High, Medium, Low)
-- Reminder & Notification System
+- Subscription Tracker with Recurring Billing
 - Flat Line/Grid Aesthetic
 - Fully Responsive & PWA Ready
 
@@ -24,6 +24,7 @@ This project features a clean **Line/Grid/Notch** flat aesthetic. It includes po
 - [Vue 3](https://vuejs.org/)
 - [Vite](https://vitejs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [Supabase](https://supabase.com/)
 
 ---
 
@@ -31,8 +32,8 @@ This project features a clean **Line/Grid/Notch** flat aesthetic. It includes po
 
 ```bash
 # Clone the repo
-git clone https://github.com/wrdnika/ingetinka.git
-cd ingetinka
+git clone https://github.com/wrdnika/Ingetinka.git
+cd Ingetinka
 
 # Install dependencies
 npm install
@@ -40,3 +41,4 @@ npm install
 # Run the app
 npm run dev
 ```
+

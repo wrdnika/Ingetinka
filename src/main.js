@@ -13,7 +13,7 @@ const updateSW = registerSW({
     }
   },
   onOfflineReady() {
-    console.log("wrdnika siap digunakan secara offline.");
+    console.log("Ingetinka siap digunakan secara offline.");
   },
 });
 

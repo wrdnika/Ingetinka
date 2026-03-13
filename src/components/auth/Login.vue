@@ -25,12 +25,12 @@
 
         <!-- Logo -->
         <div class="inline-block mb-8">
-          <img src="/wrdnika-new.png" alt="Logo" class="w-16 h-16 object-contain mx-auto opacity-90" />
+          <img src="/INGETINKA-white.png" alt="Logo" class="w-18 object-contain mx-auto opacity-90" />
         </div>
 
-        <h1 class="text-2xl font-bold text-white mb-2 tracking-tight">
+        <!-- <h1 class="text-2xl font-bold text-white mb-2 tracking-tight">
           Ingetinka
-        </h1>
+        </h1> -->
         <p class="text-white/30 mb-10 text-[10px] font-bold uppercase tracking-[0.3em]">
           {{ $t('login.subtitle') }}
         </p>

@@ -7,8 +7,8 @@
   >
     <!-- Branding -->
     <div class="h-12 px-4 border-b border-white/10 flex items-center gap-3">
-      <!-- <img src="/wrdnika-new.png" alt="Logo" class="w-6 h-6 object-contain opacity-90" /> -->
-      <h1 class="text-[11px] font-bold text-white uppercase tracking-[0.3em]">Ingetinka</h1>
+      <img src="/INGETINKA-white.png" alt="Logo" class="w-18 object-contain opacity-90" />
+      <!-- <h1 class="text-[11px] font-bold text-white uppercase tracking-[0.3em]">Ingetinka</h1> -->
     </div>
     
     <!-- Navigation -->
@@ -49,7 +49,7 @@
 
     <!-- Footer line -->
     <div class="px-5 py-4 border-t border-white/10">
-      <p class="text-[10px] text-white/20 uppercase tracking-widest">by wrdnika</p>
+      <p class="text-[10px] text-white/20 uppercase tracking-widest">by Ingetinka</p>
     </div>
   </aside>
 </template>
