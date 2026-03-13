@@ -110,13 +110,34 @@
       <Loader2 v-if="loading" class="w-4 h-4 animate-spin" />
       <span v-else>{{ subscription ? $t('subscription.form.update') : $t('subscription.form.save') }}</span>
     </button>
+
+    <!-- Google Calendar Sync Indicator -->
+    <div
+      v-if="calendarSyncError"
+      class="flex items-center gap-1.5 text-amber-400/80 text-[10px]"
+    >
+      <CalendarIcon class="w-3 h-3 shrink-0" />
+      <span>Gagal sinkron ke Google Calendar — tagihan tetap tersimpan.</span>
+    </div>
+    <div
+      v-else
+      class="flex items-center gap-1.5 text-white/30 text-[10px]"
+    >
+      <CalendarIcon class="w-3 h-3 shrink-0" />
+      <span>Tagihan akan disinkronkan ke Google Calendar (Berulang)</span>
+    </div>
   </form>
 </template>
 
 <script setup>
 import { ref, onMounted, reactive, watch } from 'vue';
 import { supabase } from '../../services/supabase';
-import { ChevronDown, Loader2 } from 'lucide-vue-next';
+import { ChevronDown, Loader2, CalendarIcon } from 'lucide-vue-next';
+import { 
+  createSubscriptionGoogleEvent, 
+  findSubscriptionGoogleEventId, 
+  updateSubscriptionGoogleEvent 
+} from '../../services/googleCalendar';
 
 const props = defineProps({
   session: Object,
@@ -127,6 +148,7 @@ const emit = defineEmits(['added', 'updated', 'close']);
 
 const loading = ref(false);
 const categories = ref([]);
+const calendarSyncError = ref(null);
 
 const form = reactive({
   name: '',
@@ -237,6 +259,7 @@ const handleCategoryChange = async (e) => {
 
 const handleSubmit = async () => {
   loading.value = true;
+  calendarSyncError.value = null;
   try {
     const payload = {
       user_id: props.session.user.id,
@@ -245,9 +268,11 @@ const handleSubmit = async () => {
       currency: 'IDR',
       cycle: form.cycle,
       first_payment_date: form.first_payment_date,
-      category_id: form.category_id || null,
+      category_id: form.category_id || null, // Relational column
       notes: form.notes
     };
+
+    const token = props.session?.provider_token;
 
     if (props.subscription) {
       // Update existing
@@ -257,18 +282,51 @@ const handleSubmit = async () => {
         .eq('id', props.subscription.id);
       
       if (error) throw error;
-      emit('updated');
+
+      // Sync to Google Calendar (UPDATE)
+      if (token) {
+        try {
+          const gcalId = await findSubscriptionGoogleEventId(token, props.subscription.id);
+          if (gcalId) {
+            await updateSubscriptionGoogleEvent(token, gcalId, payload);
+          } else {
+            await createSubscriptionGoogleEvent(token, payload, props.subscription.id);
+          }
+        } catch (err) {
+          console.warn('Google Calendar update sync failed:', err.message);
+          calendarSyncError.value = err.message;
+        }
+      }
+
+      if (!calendarSyncError.value) {
+        emit('updated');
+        resetForm();
+      }
     } else {
       // Insert new
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('subscriptions')
-        .insert(payload);
+        .insert(payload)
+        .select()
+        .single();
       
       if (error) throw error;
-      emit('added');
+      
+      // Sync to Google Calendar (CREATE)
+      if (token && data) {
+        try {
+          await createSubscriptionGoogleEvent(token, payload, data.id);
+        } catch (err) {
+          console.warn('Google Calendar create sync failed:', err.message);
+          calendarSyncError.value = err.message;
+        }
+      }
+
+      if (!calendarSyncError.value) {
+        emit('added');
+        resetForm();
+      }
     }
-    
-    resetForm();
   } catch (error) {
     console.error('Submission Error:', error);
     console.error('Payload:', {

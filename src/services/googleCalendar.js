@@ -134,3 +134,130 @@ function getNextDay(dateStr) {
   return `${yyyy}-${mm}-${dd}`;
 }
 
+// ==========================================
+// SUBSCRIPTION SYNC FUNCS
+// ==========================================
+
+function getRecurrenceRule(cycle) {
+  switch (cycle) {
+    case 'yearly': return ['RRULE:FREQ=YEARLY'];
+    case 'weekly': return ['RRULE:FREQ=WEEKLY'];
+    case 'monthly':
+    default:
+      return ['RRULE:FREQ=MONTHLY'];
+  }
+}
+
+/**
+ * Creates an all-day recurring event for a subscription in Google Calendar.
+ */
+export async function createSubscriptionGoogleEvent(token, sub, supabaseId) {
+  if (!token) throw new Error('No Google OAuth token available.');
+
+  const startDate = sub.first_payment_date;
+  const endDate = getNextDay(startDate);
+
+  const event = {
+    summary: `Tagihan: ${sub.name}`,
+    start: { date: startDate },
+    end: { date: endDate },
+    recurrence: getRecurrenceRule(sub.cycle),
+    extendedProperties: {
+      shared: {
+        supabaseSubscriptionId: supabaseId.toString(),
+      },
+    },
+  };
+
+  const response = await fetch(
+    'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(event),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+/**
+ * Finds a Google Calendar event ID by its linked Supabase Subscription ID.
+ */
+export async function findSubscriptionGoogleEventId(token, supabaseId) {
+  if (!token) return null;
+
+  const query = new URLSearchParams({
+    sharedExtendedProperty: `supabaseSubscriptionId=${supabaseId}`,
+  });
+
+  const response = await fetch(
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events?${query}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+
+  if (!response.ok) return null;
+
+  const data = await response.json();
+  return data.items?.[0]?.id || null;
+}
+
+/**
+ * Updates an existing Subscription Google Calendar event.
+ */
+export async function updateSubscriptionGoogleEvent(token, gcalId, sub) {
+  const startDate = sub.first_payment_date;
+  const endDate = getNextDay(startDate);
+
+  const event = {
+    summary: `Tagihan: ${sub.name}`,
+    start: { date: startDate },
+    end: { date: endDate },
+    recurrence: getRecurrenceRule(sub.cycle),
+  };
+
+  const response = await fetch(
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events/${gcalId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(event),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
+  }
+}
+
+/**
+ * Deletes a Subscription Google Calendar event.
+ */
+export async function deleteSubscriptionGoogleEvent(token, gcalId) {
+  const response = await fetch(
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events/${gcalId}`,
+    {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+
+  if (!response.ok && response.status !== 404) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
+  }
+}
+

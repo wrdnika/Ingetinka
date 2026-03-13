@@ -111,6 +111,7 @@ import { CreditCard, Edit2, Trash2, Plus } from 'lucide-vue-next';
 import SubscriptionLogo from './SubscriptionLogo.vue';
 import Modal from '../common/Modal.vue';
 import SubscriptionForm from './SubscriptionForm.vue';
+import { findSubscriptionGoogleEventId, deleteSubscriptionGoogleEvent } from '../../services/googleCalendar';
 
 const props = defineProps({
   session: Object
@@ -159,6 +160,18 @@ const handleDelete = async (sub) => {
   if (!confirm(`Are you sure you want to delete ${sub.name}?`)) return;
 
   try {
+    // Sync to Google Calendar (DELETE)
+    const token = props.session?.provider_token;
+    const syncDelete = async () => {
+      try {
+        const gcalId = await findSubscriptionGoogleEventId(token, sub.id);
+        if (gcalId) await deleteSubscriptionGoogleEvent(token, gcalId);
+      } catch (err) {
+        console.warn('Failed to delete Google Calendar subscription event:', err.message);
+      }
+    };
+    syncDelete(); // Non-blocking
+
     const { error } = await supabase
       .from('subscriptions')
       .delete()
