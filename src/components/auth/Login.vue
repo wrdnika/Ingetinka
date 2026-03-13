@@ -20,10 +20,8 @@
       :class="{ 'translate-y-4 opacity-0': !isMounted }"
     >
       <div class="border border-white/10 bg-gray-900/80 p-10 text-center">
-        <!-- Top accent line -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
 
-        <!-- Logo -->
         <div class="inline-block mb-8">
           <img src="/INGETINKA-white.png" alt="Logo" class="w-18 object-contain mx-auto opacity-90" />
         </div>
@@ -38,11 +36,13 @@
         <!-- Divider -->
         <div class="h-px bg-white/10 mb-8"></div>
 
+
         <!-- Action Button -->
         <div class="space-y-3">
           <button 
             @click="handleLogin"
-            class="group w-full flex items-center justify-center gap-3 bg-white text-gray-900 font-bold py-3 px-6 text-sm tracking-wide btn-notch hover:bg-white/90 active:scale-[0.98] transition-all duration-200"
+            :disabled="!agreed"
+            class="group w-full flex items-center justify-center gap-3 bg-white text-gray-900 font-bold py-3 px-6 text-sm tracking-wide btn-notch hover:bg-white/90 active:scale-[0.98] transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:grayscale"
           >
             <svg class="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -54,13 +54,39 @@
           </button>
         </div>
 
+        
+        <!-- Agreement Checkbox -->
+        <div class="mt-6 flex items-start gap-3 text-left">
+          <input 
+            type="checkbox" 
+            id="agreement" 
+            v-model="agreed"
+            class="mt-1 w-4 h-4 bg-gray-900 border-white/10 rounded focus:ring-cyan-500 text-cyan-500 transition-colors"
+          >
+          <i18n-t 
+            keypath="login.agreement" 
+            tag="label" 
+            for="agreement" 
+            class="text-[10px] text-white/40 leading-relaxed uppercase tracking-widest cursor-pointer hover:text-white/60 transition-colors"
+          >
+            <template #privacy>
+              <router-link to="/privacy" class="text-cyan-400 hover:underline">{{ $t('legal.privacy.title') }}</router-link>
+            </template>
+            <template #terms>
+              <router-link to="/terms" class="text-cyan-400 hover:underline">{{ $t('legal.terms.title') }}</router-link>
+            </template>
+          </i18n-t>
+        </div>
+
         <!-- Footer -->
-        <div class="mt-10 flex items-center justify-center gap-4 text-white/20 text-[9px] font-bold uppercase tracking-[0.3em]">
-          <span>Productivity</span>
-          <span class="w-px h-3 bg-white/20 inline-block"></span>
-          <span>Organization</span>
-          <span class="w-px h-3 bg-white/20 inline-block"></span>
-          <span>Efficiency</span>
+        <div class="mt-10 flex flex-col gap-4">
+          <div class="flex items-center justify-center gap-4 text-white/20 text-[9px] font-bold uppercase tracking-[0.3em]">
+            <span>Productivity</span>
+            <span class="w-px h-3 bg-white/20 inline-block"></span>
+            <span>Organization</span>
+            <span class="w-px h-3 bg-white/20 inline-block"></span>
+            <span>Efficiency</span>
+          </div>
         </div>
 
         <!-- Bottom accent line -->
@@ -81,6 +107,7 @@ defineProps({
 
 const { locale } = useI18n();
 const isMounted = ref(false);
+const agreed = ref(false);
 
 onMounted(() => {
   setTimeout(() => {

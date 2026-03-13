@@ -19,6 +19,16 @@ const routes = [
     name: 'Calendar',
     component: CalendarView,
   },
+  {
+    path: '/privacy',
+    name: 'PrivacyPolicy',
+    component: () => import('../views/PrivacyPolicy.vue'),
+  },
+  {
+    path: '/terms',
+    name: 'TermsOfService',
+    component: () => import('../views/TermsOfService.vue'),
+  },
 ];
 
 const router = createRouter({
