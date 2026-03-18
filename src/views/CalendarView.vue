@@ -10,6 +10,10 @@
       </div>
 
       <div class="flex items-center justify-between md:justify-end gap-3" v-if="token">
+        <button @click="openCreateModal()" class="flex items-center gap-2 px-3 py-1.5 bg-cyan-400 text-gray-900 border border-cyan-400 btn-notch hover:bg-cyan-300 transition-colors mr-2">
+          <Plus class="w-4 h-4" />
+          <span class="text-[10px] font-bold uppercase tracking-widest hidden md:block">Buat Event</span>
+        </button>
         <div class="flex items-center gap-2">
           <button @click="prevMonth" class="p-2 border border-white/10 btn-notch text-white/40 hover:text-white hover:border-white/30 transition-colors" title="Bulan Sebelumnya">
             <ChevronLeft class="w-4 h-4"/>
@@ -63,11 +67,12 @@
         <div 
           v-for="(day, idx) in calendarGrid" 
           :key="idx"
-          class="border-b border-r border-white/10 p-1 transition-colors hover:bg-white/5 flex flex-col relative group"
+          class="border-b border-r border-white/10 p-1 transition-colors hover:bg-white/5 flex flex-col relative group cursor-pointer"
           :class="[
             idx % 7 === 6 ? 'border-r-0' : '',
             !day.isCurrentMonth ? 'bg-black/10' : ''
           ]"
+          @click="openCreateModal(day.date)"
         >
            <div class="flex justify-center mb-1 mt-0.5">
              <div 
@@ -79,11 +84,10 @@
            </div>
            
            <div class="flex-grow overflow-y-auto custom-scrollbar space-y-[2px] md:space-y-1 relative z-10 min-h-0 px-0.5">
-             <a 
+             <div 
                v-for="event in eventsByDate[formatDateObj(day.date)] || []" 
                :key="event.id"
-               :href="event.htmlLink"
-               target="_blank"
+               @click.stop="handleEventClick(event)"
                class="block text-[9px] md:text-[11px] leading-tight px-1.5 py-1 rounded-md transition-all w-full text-left truncate cursor-pointer hover:scale-[1.02] hover:shadow-lg hover:z-20 relative group/event"
                :class="getEventClass(event)"
                :title="(event.start.dateTime ? new Date(event.start.dateTime).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}) + ' - ' : '') + (event.summary || '(Tanpa Judul)')"
@@ -92,11 +96,21 @@
                  {{ formatTime(event.start.dateTime) }}
                </span>
                <span class="font-medium">{{ event.summary || '(Tanpa Judul)' }}</span>
-             </a>
+             </div>
            </div>
         </div>
       </div>
       
+      <!-- Modal for Event CRUD -->
+      <Modal :show="showModal" :title="selectedEvent?.id ? 'Edit Event' : 'Buat Event Baru'" @close="closeModal">
+        <EventForm 
+          :initial-data="selectedEvent" 
+          :loading="isSaving"
+          @save="handleSaveEvent"
+          @delete="handleDeleteEvent"
+        />
+      </Modal>
+
       <!-- Loading overlay during fetch -->
       <div v-if="loading" class="absolute inset-0 bg-[#0f172a]/70 backdrop-blur-sm z-20 flex flex-col items-center justify-center transition-opacity duration-300">
         <div class="w-12 h-12 border-4 border-cyan-500/20 border-t-cyan-400 rounded-full animate-spin mb-4"></div>
@@ -108,8 +122,10 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import { Calendar, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { Calendar, AlertCircle, ChevronLeft, ChevronRight, Plus } from 'lucide-vue-next';
 import { useAuth } from '../composables/useAuth';
+import Modal from '../components/common/Modal.vue';
+import EventForm from '../components/calendar/EventForm.vue';
 
 const { getGoogleToken, handleLogin } = useAuth();
 
@@ -118,6 +134,11 @@ const loading = ref(true);
 const error = ref(null);
 const token = ref(null);
 const currentDate = ref(new Date());
+
+const showModal = ref(false);
+const selectedEvent = ref(null);
+const isSaving = ref(false);
+
 let fetchId = 0;
 
 const currentMonthName = computed(() => {
@@ -256,6 +277,85 @@ const nextMonth = () => {
 };
 const goToToday = () => {
   currentDate.value = new Date();
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  selectedEvent.value = null;
+};
+
+const openCreateModal = (date) => {
+  selectedEvent.value = {
+    start: {
+      date: date ? formatDateObj(date) : formatDateObj(new Date())
+    },
+    end: {
+      date: date ? formatDateObj(date) : formatDateObj(new Date())
+    }
+  };
+  showModal.value = true;
+};
+
+const handleEventClick = (event) => {
+  if (event.type === 'holiday') {
+    // Holidays are read-only, we can open the link instead
+    if (event.htmlLink) window.open(event.htmlLink, '_blank');
+    return;
+  }
+  selectedEvent.value = { ...event };
+  showModal.value = true;
+};
+
+const handleSaveEvent = async (eventData) => {
+  isSaving.value = true;
+  try {
+    const isEdit = !!selectedEvent.value.id;
+    const url = isEdit 
+      ? `https://www.googleapis.com/calendar/v3/calendars/primary/events/${selectedEvent.value.id}`
+      : `https://www.googleapis.com/calendar/v3/calendars/primary/events`;
+    
+    const response = await fetch(url, {
+      method: isEdit ? 'PATCH' : 'POST',
+      headers: {
+        'Authorization': `Bearer ${token.value}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(eventData)
+    });
+
+    if (!response.ok) throw new Error('Gagal menyimpan event');
+    
+    closeModal();
+    fetchEvents();
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  } finally {
+    isSaving.value = false;
+  }
+};
+
+const handleDeleteEvent = async (eventId) => {
+  if (!confirm('Yakin ingin menghapus event ini?')) return;
+  isSaving.value = true;
+  try {
+    const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${eventId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token.value}`
+      }
+    });
+
+    if (!response.ok) throw new Error('Gagal menghapus event');
+    
+    closeModal();
+    fetchEvents();
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  } finally {
+    isSaving.value = false;
+  }
 };
 
 const fetchEvents = async () => {
