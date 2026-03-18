@@ -227,6 +227,19 @@ const formatTime = (dateTimeStr) => {
 };
 
 const getEventClass = (event) => {
+  // If it's a holiday
+  if (event.type === 'holiday') {
+    const isPublicHoliday = event.description?.toLowerCase().includes('public holiday') || 
+                            event.summary?.toLowerCase().includes('libur') || 
+                            !event.summary?.toLowerCase().includes('cuti');
+    
+    if (isPublicHoliday) {
+      return 'bg-red-600/60 text-white border border-red-500 hover:bg-red-500/80 shadow-sm';
+    }
+    // For Cuti Bersama
+    return 'bg-orange-500/60 text-white border border-orange-500 hover:bg-orange-500/80 shadow-sm';
+  }
+
   // If it's an all-day event (only has date)
   if (event.start.date) {
     return 'bg-cyan-600/60 text-white border border-cyan-500 hover:bg-cyan-500/80 shadow-sm';
@@ -264,24 +277,46 @@ const fetchEvents = async () => {
     lastDate.setHours(23, 59, 59, 999);
     const timeMax = lastDate.toISOString();
 
-    const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin}&timeMax=${timeMax}&maxResults=2500&singleEvents=true&orderBy=startTime`, {
-      headers: {
-        'Authorization': `Bearer ${token.value}`
+    // Fetch from primary and Indonesian holidays
+    const calendarIds = ['primary', 'id.indonesian#holiday@group.v.calendar.google.com'];
+    
+    const fetchPromises = calendarIds.map(async (calendarId) => {
+      try {
+        const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?timeMin=${timeMin}&timeMax=${timeMax}&maxResults=2500&singleEvents=true&orderBy=startTime`, {
+          headers: {
+            'Authorization': `Bearer ${token.value}`
+          }
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            token.value = null;
+            throw new Error('Sesi kedaluwarsa, silakan login ulang.');
+          }
+          // If a specific calendar fails (not primary), we can just log and ignore
+          if (calendarId !== 'primary') {
+            console.warn(`Gagal mengambil data dari kalender: ${calendarId}`);
+            return [];
+          }
+          throw new Error(`Gagal mengambil data dari Google Calendar (${calendarId})`);
+        }
+
+        const data = await response.json();
+        return (data.items || []).map(item => ({
+          ...item,
+          type: calendarId === 'primary' ? 'personal' : 'holiday'
+        }));
+      } catch (err) {
+        if (calendarId === 'primary') throw err;
+        console.warn(`Error fetching calendar ${calendarId}:`, err);
+        return [];
       }
     });
 
-    if (!response.ok) {
-      if (response.status === 401) {
-        token.value = null;
-        throw new Error('Sesi kedaluwarsa, silakan login ulang.');
-      }
-      throw new Error('Gagal mengambil data dari Google Calendar');
-    }
-
+    const results = await Promise.all(fetchPromises);
     if (currentFetchId !== fetchId) return;
 
-    const data = await response.json();
-    events.value = data.items || [];
+    events.value = results.flat();
   } catch (err) {
     if (currentFetchId !== fetchId) return;
     console.error(err);
