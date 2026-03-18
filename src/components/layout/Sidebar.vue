@@ -1,6 +1,6 @@
 <template>
   <aside 
-    class="sidebar fixed lg:relative h-full w-56 bg-gray-900 border-r border-white/10 transition-all duration-300 z-30 flex flex-col"
+    class="sidebar fixed lg:relative h-full w-56 bg-gray-900 border-r border-white/10 transition-all duration-300 z-30 flex flex-col flex-shrink-0"
     :class="[
       isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
     ]"

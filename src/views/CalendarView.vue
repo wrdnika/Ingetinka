@@ -59,7 +59,7 @@
       </div>
       
       <!-- Grid cells -->
-      <div class="flex-grow grid grid-cols-7 grid-rows-6">
+      <div class="flex-grow grid grid-cols-7 grid-rows-6 min-h-0">
         <div 
           v-for="(day, idx) in calendarGrid" 
           :key="idx"

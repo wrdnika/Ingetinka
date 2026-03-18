@@ -1,5 +1,5 @@
 <template>
-  <header class="h-12 flex items-center justify-between px-4 border-b border-white/10 bg-gray-900 relative z-20">
+  <header class="h-12 flex-shrink-0 flex items-center justify-between px-4 border-b border-white/10 bg-gray-900 relative z-20">
     <div class="flex items-center gap-4">
       <!-- Hamburger Menu for Mobile -->
       <button 

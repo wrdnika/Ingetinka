@@ -23,15 +23,16 @@
       @close="isSidebarOpen = false"
     />
 
-    <div class="flex-grow flex flex-col min-w-0 relative">
+    <div class="flex-grow flex flex-col min-w-0 min-h-0 relative">
       <Header 
         :session="session" 
         :handleLogout="handleLogout" 
         @toggle-sidebar="isSidebarOpen = !isSidebarOpen"
+        class="flex-shrink-0"
       />
       
-      <main class="flex-grow overflow-y-auto custom-scrollbar">
-        <div class="h-full">
+      <main class="flex-grow flex flex-col min-h-0 overflow-hidden">
+        <div class="flex-grow min-h-0 relative">
           <router-view :session="session" />
         </div>
       </main>
