@@ -42,14 +42,16 @@
       </button>
     </div>
 
-    <div v-else-if="!token && !loading" class="flex-grow flex flex-col items-center justify-center animate-fade-in delay-200">
+    <div v-else-if="(!token || isGoogleExpired) && !loading" class="flex-grow flex flex-col items-center justify-center animate-fade-in delay-200">
       <div class="w-16 h-16 rounded-full bg-cyan-500/10 flex items-center justify-center mb-4">
-        <Calendar class="w-8 h-8 text-cyan-400" />
+        <Calendar class="w-8 h-8 text-cyan-400" :class="{ 'text-red-400 animate-pulse': isGoogleExpired }" />
       </div>
-      <h3 class="text-xl font-bold text-white mb-2">Akses Kalender Diperlukan</h3>
-      <p class="text-white/50 text-center max-w-md mb-6">Silakan login ulang dengan Google untuk memberikan izin akses kalender.</p>
-      <button @click="handleLogin" class="px-6 py-2.5 bg-white/5 hover:bg-white/10 text-white rounded-xl border border-white/10 transition-colors font-medium cursor-pointer">
-        Login dengan Google
+      <h3 class="text-xl font-bold text-white mb-2">{{ isGoogleExpired ? 'Sesi Kalender Kedaluwarsa' : 'Akses Kalender Diperlukan' }}</h3>
+      <p class="text-white/50 text-center max-w-md mb-6">
+        {{ isGoogleExpired ? 'Sesi Google Anda telah berakhir. Hubungkan kembali untuk melihat dan mengelola event Anda.' : 'Silakan hubungkan Google Calendar untuk memberikan izin akses kalender.' }}
+      </p>
+      <button @click="handleLogin" class="px-6 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-gray-900 rounded-xl transition-colors font-bold uppercase tracking-widest text-xs btn-notch">
+        {{ isGoogleExpired ? 'Hubungkan Ulang' : 'Hubungkan Kalender' }}
       </button>
     </div>
 
@@ -127,7 +129,7 @@ import { useAuth } from '../composables/useAuth';
 import Modal from '../components/common/Modal.vue';
 import EventForm from '../components/calendar/EventForm.vue';
 
-const { getGoogleToken, handleLogin } = useAuth();
+const { getGoogleToken, handleLogin, setGoogleExpired, isGoogleExpired } = useAuth();
 
 const events = ref([]);
 const loading = ref(true);
@@ -323,7 +325,10 @@ const handleSaveEvent = async (eventData) => {
       body: JSON.stringify(eventData)
     });
 
-    if (!response.ok) throw new Error('Gagal menyimpan event');
+    if (!response.ok) {
+      if (response.status === 401) setGoogleExpired(true);
+      throw new Error('Gagal menyimpan event');
+    }
     
     closeModal();
     fetchEvents();
@@ -346,7 +351,10 @@ const handleDeleteEvent = async (eventId) => {
       }
     });
 
-    if (!response.ok) throw new Error('Gagal menghapus event');
+    if (!response.ok) {
+      if (response.status === 401) setGoogleExpired(true);
+      throw new Error('Gagal menghapus event');
+    }
     
     closeModal();
     fetchEvents();
@@ -391,7 +399,8 @@ const fetchEvents = async () => {
         if (!response.ok) {
           if (response.status === 401) {
             token.value = null;
-            throw new Error('Sesi kedaluwarsa, silakan login ulang.');
+            setGoogleExpired(true);
+            throw new Error('Sesi kedaluwarsa, silakan hubungkan ulang kalender.');
           }
           // If a specific calendar fails (not primary), we can just log and ignore
           if (calendarId !== 'primary') {

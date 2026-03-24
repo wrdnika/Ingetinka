@@ -24,6 +24,7 @@
     />
 
     <div class="flex-grow flex flex-col min-w-0 min-h-0 relative">
+      <ConnectionAlert />
       <Header 
         :session="session" 
         :handleLogout="handleLogout" 
@@ -66,6 +67,7 @@ import { useRoute } from 'vue-router';
 import Login from './components/auth/Login.vue';
 import Header from './components/layout/Header.vue';
 import Sidebar from './components/layout/Sidebar.vue';
+import ConnectionAlert from './components/common/ConnectionAlert.vue';
 
 const { session, handleLogin, handleLogout } = useAuth();
 const route = useRoute();

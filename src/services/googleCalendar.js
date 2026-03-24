@@ -40,7 +40,9 @@ export async function createGoogleEvent(token, task, supabaseId) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
+    const error = new Error(errorData?.error?.message || `HTTP ${response.status}`);
+    error.status = response.status;
+    throw error;
   }
 
   return response.json();
@@ -100,7 +102,9 @@ export async function updateGoogleEvent(token, gcalId, task) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
+    const error = new Error(errorData?.error?.message || `HTTP ${response.status}`);
+    error.status = response.status;
+    throw error;
   }
 }
 
@@ -183,7 +187,9 @@ export async function createSubscriptionGoogleEvent(token, sub, supabaseId) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
+    const error = new Error(errorData?.error?.message || `HTTP ${response.status}`);
+    error.status = response.status;
+    throw error;
   }
   return response.json();
 }
@@ -239,7 +245,9 @@ export async function updateSubscriptionGoogleEvent(token, gcalId, sub) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
+    const error = new Error(errorData?.error?.message || `HTTP ${response.status}`);
+    error.status = response.status;
+    throw error;
   }
 }
 

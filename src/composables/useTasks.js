@@ -1,6 +1,7 @@
 import { ref, computed, watchEffect } from 'vue';
 import { supabase } from '../services/supabase';
 import { createGoogleEvent, findGoogleEventId, updateGoogleEvent, deleteGoogleEvent } from '../services/googleCalendar';
+import { useAuth } from './useAuth';
 
 export function useTasks(session) {
   const tasks = ref([]);
@@ -8,6 +9,7 @@ export function useTasks(session) {
   const showModal = ref(false);
   const searchQuery = ref('');
   const calendarSyncError = ref(null); // null = no error, string = error message
+  const { setGoogleExpired } = useAuth();
   const filterCriteria = ref({
     status: 'all',
     priority: 'all',
@@ -118,6 +120,9 @@ export function useTasks(session) {
     } catch (calendarErr) {
       console.warn('Google Calendar sync failed (task is still saved):', calendarErr.message);
       calendarSyncError.value = calendarErr.message;
+      if (calendarErr.status === 401) {
+        setGoogleExpired(true);
+      }
     }
   };
 
@@ -204,6 +209,9 @@ export function useTasks(session) {
             }
           } catch (err) {
             console.warn('Failed to sync update to Google Calendar:', err.message);
+            if (err.status === 401) {
+              setGoogleExpired(true);
+            }
           }
         };
         syncUpdate(); // Non-blocking

@@ -16,6 +16,8 @@
     </div>
 
     <div class="flex items-center gap-4">
+      <CalendarStatus v-if="session" />
+      
       <div v-if="session" class="relative">
         <button @click="toggleProfile" class="flex items-center gap-3 focus:outline-none group">
           <p class="hidden md:block text-xs font-medium text-white/40 group-hover:text-white/70 transition-colors tracking-wide">
@@ -71,6 +73,7 @@
 import { ref } from 'vue';
 import { Settings, Info, LogOut, Globe, Menu } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
+import CalendarStatus from '../calendar/CalendarStatus.vue';
 
 const props = defineProps({
   session: Object,
